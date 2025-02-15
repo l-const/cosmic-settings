@@ -462,7 +462,7 @@ impl Page {
                 .map(|name| name.0.as_str())
         }
     }
-
+    // TODO: check logic
     /// Applies the current settings to cosmic-bg.
     pub fn config_apply(&mut self) {
         let Some(output) = self.config_output().map(String::from) else {
@@ -470,6 +470,7 @@ impl Page {
         };
 
         if self.wallpaper_service_config.same_on_all {
+            // TODO: why?
             self.wallpaper_service_config.backgrounds.clear();
             // self.wallpaper_service_config.outputs.clear();
         } else if let Some(pos) = self
@@ -699,6 +700,7 @@ impl Page {
 
     #[allow(clippy::too_many_lines)]
     pub fn update(&mut self, message: Message) -> Task<crate::app::Message> {
+        eprintln!("message: {:?}", &message);
         match message {
             Message::UpdateState(_state) => {
                 if let Choice::Slideshow = self.selection.active {
@@ -850,6 +852,11 @@ impl Page {
 
             Message::SameWallpaper(value) => {
                 self.wallpaper_service_config.same_on_all = value;
+                if self.wallpaper_service_config.same_on_all {
+                    dbg!("same on all");
+                    dbg!(&self.wallpaper_service_config.backgrounds);
+                    dbg!(&self.selection.active);
+                }
                 self.wallpaper_service_config.backgrounds.clear();
             }
 
@@ -1003,6 +1010,7 @@ impl Page {
     fn select_wallpaper_entry(&mut self, entry: &wallpaper::Entry) {
         match entry.source {
             wallpaper::Source::Path(ref path) => {
+                dbg!(&path);
                 if path.is_dir() {
                     self.selection.active = Choice::Slideshow;
                     self.cache_display_image();

@@ -73,6 +73,7 @@ pub async fn config() -> (Config, HashMap<String, (String, (u32, u32))>) {
     (config, displays)
 }
 
+// TODO: config applied
 pub fn set(config: &mut Config, entry: Entry) {
     if let Ok(context) = cosmic_bg_config::context() {
         let _res = context.set_same_on_all(config.same_on_all);
